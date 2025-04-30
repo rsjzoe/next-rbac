@@ -5,7 +5,6 @@ import { UserManagement } from "./components/user-management";
 
 export default function Page() {
   return (
-    // <SidebarInset>
     <div className="flex flex-col min-h-screen">
       <header className="border-b">
         <div className="flex h-16 items-center px-4">
@@ -16,6 +15,5 @@ export default function Page() {
         <UserManagement />
       </main>
     </div>
-    // </SidebarInset>
   );
 }

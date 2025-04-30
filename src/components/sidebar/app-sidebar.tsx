@@ -1,7 +1,7 @@
 "use client";
 
-import { LogOut, Users } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { LogOut, ShieldCheck, Users } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,15 +21,33 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { ServiceName } from "@/types/type";
 
+type SidebarItem = {
+  name: string;
+  icon: React.ElementType;
+  path: string;
+  service?: ServiceName;
+};
 export function AppSidebar() {
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = () => {
     // Ici, vous pourriez implémenter la logique de déconnexion
     console.log("Déconnexion");
     // router.push("/login")
   };
+
+  const mainItems: SidebarItem[] = [
+    {
+      name: "Utilisateurs",
+      icon: Users,
+      path: "/users",
+      service: "utilisateurs",
+    },
+    { name: "Rôles", icon: ShieldCheck, path: "/roles", service: "roles" },
+  ];
 
   return (
     <Sidebar collapsible="icon">
@@ -43,19 +61,26 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent className="p-2">
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive tooltip="Utilisateurs">
-              <Button
-                variant="ghost"
-                className="w-full justify-start group-data-[collapsible=icon]:justify-center"
+          {mainItems.map((item) => (
+            <SidebarMenuItem key={item.name}>
+              <SidebarMenuButton
+                asChild
+                isActive={pathname === item.path}
+                tooltip={item.name}
               >
-                <Users className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
-                <span className="group-data-[collapsible=icon]:hidden">
-                  Utilisateurs
-                </span>
-              </Button>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start group-data-[collapsible=icon]:justify-center"
+                  onClick={() => router.push(item.path)}
+                >
+                  <item.icon className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
+                  <span className="group-data-[collapsible=icon]:hidden">
+                    {item.name}
+                  </span>
+                </Button>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="border-t p-4 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-2">
