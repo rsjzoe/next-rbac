@@ -9,58 +9,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+
 import { roleService } from "./service/service";
 import Link from "next/link";
+import { RoleDelete } from "./components/role-delete";
 
 export default async function RolesPage() {
   const roles = await roleService.listAll();
-  console.log(roles);
-
-  // const [isLoading, setIsLoading] = useState(true);
-  // const roles = useRole((state) => state.roles);
-  // const setRoles = useRole((state) => state.setRoles);
-  // const router = useRouter();
-  // const { addRole, deleteRole, roles, updateRole } = useRoleLocal();
-
-  // useEffect(() => {
-  //   const fetchRoles = async () => {
-  //     try {
-  //       const data = await getRoles();
-  //       setRoles(data);
-  //     } catch (error) {
-  //       toast("Erreur", {
-  //         description: "Impossible de charger les rôles",
-  //       });
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchRoles();
-  // }, []);
-
-  // const handleDelete = async (id: number) => {
-  //   try {
-  //     await deleteRole(id);
-  //     setRoles(roles.filter((role) => role.id !== id));
-  //     toast("Succès", { description: "Le rôle a été supprimé avec succès" });
-  //   } catch (error) {
-  //     toast("Erreur", {
-  //       description: "Impossible de supprimer le rôle",
-  //     });
-  //   }
-  // };
 
   return (
     <div className="flex-1 p-6">
@@ -109,40 +64,7 @@ export default async function RolesPage() {
                             Modifier
                           </Button>
                         </Link>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
-                            >
-                              <Trash2 className="h-4 w-4 mr-1" />
-                              Supprimer
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>
-                                Êtes-vous sûr?
-                              </AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Cette action ne peut pas être annulée. Cela
-                                supprimera définitivement le rôle &quot;
-                                {role.roleName}&quot; et toutes ses permissions
-                                associées.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Annuler</AlertDialogCancel>
-                              <AlertDialogAction
-                                className="bg-red-500 hover:bg-red-600"
-                                // onClick={() => handleDelete(role.id)}
-                              >
-                                Supprimer
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
+                        <RoleDelete role={role} />
                       </div>
                     </TableCell>
                   </TableRow>

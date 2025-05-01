@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { roleService } from "./service/service";
 import { CreateRole, UpdateRole } from "./types/type";
 
@@ -10,6 +11,7 @@ export async function addRole(role: CreateRole) {
 
 export async function deleteRole(id: number) {
   let deletedRole = await roleService.delete(id);
+  revalidatePath("/roles");
   return deletedRole;
 }
 
