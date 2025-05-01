@@ -7,7 +7,7 @@ import {
   UpdateRole,
   HasAccess,
   HasAccessOutput,
-} from "@/types/type";
+} from "@/app/(sidebar)/roles/types/type";
 
 // import type {
 //   Role,

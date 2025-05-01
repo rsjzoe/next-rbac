@@ -10,9 +10,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "@/components/ui/use-toast";
 import { getRole, updateRole, getServices } from "@/lib/actions";
-import { Role, Service, UpdatePermission } from "@/types/type";
+import {
+  Role,
+  Service,
+  UpdatePermission,
+} from "@/app/(sidebar)/roles/types/type";
+import { toast } from "sonner";
 
 interface EditRolePageProps {
   params: {
@@ -60,10 +64,8 @@ export default function EditRolePage({ params }: EditRolePageProps) {
 
         setPermissions(initialPermissions);
       } catch (error) {
-        toast({
-          title: "Erreur",
+        toast("Erreur", {
           description: "Impossible de charger les données",
-          variant: "destructive",
         });
       } finally {
         setIsLoading(false);
@@ -107,10 +109,8 @@ export default function EditRolePage({ params }: EditRolePageProps) {
     e.preventDefault();
 
     if (!roleName.trim()) {
-      toast({
-        title: "Erreur",
+      toast("Erreur", {
         description: "Le nom du rôle est requis",
-        variant: "destructive",
       });
       return;
     }
@@ -122,18 +122,13 @@ export default function EditRolePage({ params }: EditRolePageProps) {
         permissions,
       });
 
-      toast({
-        title: "Succès",
+      toast("Succès", {
         description: "Le rôle a été mis à jour avec succès",
       });
 
       router.push("/roles");
     } catch (error) {
-      toast({
-        title: "Erreur",
-        description: "Impossible de mettre à jour le rôle",
-        variant: "destructive",
-      });
+      toast("Erreur", { description: "Impossible de mettre à jour le rôle" });
     } finally {
       setIsSaving(false);
     }

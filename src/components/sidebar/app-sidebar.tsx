@@ -21,7 +21,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ServiceName } from "@/types/type";
+import { ServiceName } from "@/app/(sidebar)/roles/types/type";
 
 type SidebarItem = {
   name: string;

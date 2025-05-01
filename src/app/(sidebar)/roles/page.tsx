@@ -24,14 +24,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { toast } from "@/components/ui/use-toast";
-import { Role } from "@/types/type";
-// import { getRoles, deleteRole } from "@/lib/actions";
+import { toast } from "sonner";
+import { getRoles, deleteRole } from "@/lib/actions";
+import { useRole } from "./hooks/use-role";
 
 export default function RolesPage() {
-  const [roles, setRoles] = useState<Role[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const roles = useRole((state) => state.roles);
+  const setRoles = useRole((state) => state.setRoles);
   const router = useRouter();
+  // const { addRole, deleteRole, roles, updateRole } = useRoleLocal();
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -39,10 +41,8 @@ export default function RolesPage() {
         const data = await getRoles();
         setRoles(data);
       } catch (error) {
-        toast({
-          title: "Erreur",
+        toast("Erreur", {
           description: "Impossible de charger les rôles",
-          variant: "destructive",
         });
       } finally {
         setIsLoading(false);
@@ -56,15 +56,10 @@ export default function RolesPage() {
     try {
       await deleteRole(id);
       setRoles(roles.filter((role) => role.id !== id));
-      toast({
-        title: "Succès",
-        description: "Le rôle a été supprimé avec succès",
-      });
+      toast("Succès", { description: "Le rôle a été supprimé avec succès" });
     } catch (error) {
-      toast({
-        title: "Erreur",
+      toast("Erreur", {
         description: "Impossible de supprimer le rôle",
-        variant: "destructive",
       });
     }
   };

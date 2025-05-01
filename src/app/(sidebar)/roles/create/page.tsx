@@ -10,9 +10,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "@/components/ui/use-toast";
 import { createRole, getServices } from "@/lib/actions";
-import { CreatePermission, CreateRole, Service } from "@/types/type";
+import {
+  CreatePermission,
+  CreateRole,
+  Service,
+} from "@/app/(sidebar)/roles/types/type";
+import { toast } from "sonner";
 
 export default function CreateRolePage() {
   const router = useRouter();
@@ -21,6 +25,7 @@ export default function CreateRolePage() {
   const [permissions, setPermissions] = useState<CreatePermission[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  // const addRole = useRole((state) => state.addRole);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -41,11 +46,7 @@ export default function CreateRolePage() {
 
         setPermissions(initialPermissions);
       } catch (error) {
-        toast({
-          title: "Erreur",
-          description: "Impossible de charger les services",
-          variant: "destructive",
-        });
+        toast("Erreur", { description: "Impossible de charger les services" });
       } finally {
         setIsLoading(false);
       }
@@ -88,10 +89,8 @@ export default function CreateRolePage() {
     e.preventDefault();
 
     if (!roleName.trim()) {
-      toast({
-        title: "Erreur",
+      toast("Erreur", {
         description: "Le nom du rôle est requis",
-        variant: "destructive",
       });
       return;
     }
@@ -105,18 +104,16 @@ export default function CreateRolePage() {
       };
 
       await createRole(newRole);
+      // addRole(newRole);
 
-      toast({
-        title: "Succès",
+      toast("Succès", {
         description: "Le rôle a été créé avec succès",
       });
 
       router.push("/roles");
     } catch (error) {
-      toast({
-        title: "Erreur",
+      toast("Erreur", {
         description: "Impossible de créer le rôle",
-        variant: "destructive",
       });
     } finally {
       setIsSaving(false);
