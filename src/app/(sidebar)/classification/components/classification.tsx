@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/select";
 import { AddEditClassificationDialog } from "./add-edit-classification-dialog";
 import { UserContext } from "../../users/context/user-context";
+import { useUserConnected } from "../../users/context/use-user-connected";
 
 // Type pour les classifications
 type Classification = {
@@ -107,8 +108,7 @@ const categories = [
 ];
 
 export function ClassificationManagement() {
-  const context = useContext(UserContext);
-  console.log("User context:", context);
+  const { hasAccess } = useUserConnected();
 
   const [classifications, setClassifications] = useState<Classification[]>(
     initialClassifications
@@ -185,10 +185,12 @@ export function ClassificationManagement() {
             Gérez les classifications de documents et de contenus.
           </CardDescription>
         </div>
-        <Button onClick={() => setIsAddDialogOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" />
-          Ajouter une classification
-        </Button>
+        {hasAccess("classification", "canCreate") && (
+          <Button onClick={() => setIsAddDialogOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            Ajouter une classification
+          </Button>
+        )}
       </CardHeader>
       <CardContent className="p-6">
         <div className="mb-4 flex flex-wrap gap-4 items-center">

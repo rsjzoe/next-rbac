@@ -1,14 +1,19 @@
-import { CreateRole, Role, UpdateRole } from "../types/type";
+import { ServiceDataService } from "../../service-data/service-data-service";
+import { CreateRole, Permission, Role, UpdateRole } from "../types/type";
 import { RoleService } from "./role-service";
 
 export class RoleServiceInMemory implements RoleService {
   private roles: Role[] = [];
 
+  constructor(private serviceData: ServiceDataService) {}
+
   addRole = async (role: CreateRole) => {
-    const newRole: Role = {
-      id: Date.now(),
-      roleName: role.roleName,
-      permissions: role.permissions.map((permission) => ({
+    const permissions: Permission[] = [];
+    for (let permission of role.permissions) {
+      const service = await this.serviceData.findServiceById(
+        permission.serviceId
+      );
+      permissions.push({
         id: Date.now(),
         canCreate: permission.canCreate,
         canRead: permission.canRead,
@@ -16,9 +21,14 @@ export class RoleServiceInMemory implements RoleService {
         canDelete: permission.canDelete,
         service: {
           id: permission.serviceId,
-          name: "",
+          name: service.name,
         },
-      })),
+      });
+    }
+    const newRole: Role = {
+      id: Date.now(),
+      roleName: role.roleName,
+      permissions: permissions,
     };
     this.roles.push(newRole);
 
@@ -65,19 +75,26 @@ export class RoleServiceInMemory implements RoleService {
   };
 
   updateRoleById = async (id: number, updatedRole: UpdateRole) => {
+    const permissions: Permission[] = [];
+    for (let permission of updatedRole.permissions) {
+      const service = await this.serviceData.findServiceById(
+        permission.serviceId
+      );
+      permissions.push({
+        id: Date.now(),
+        canCreate: permission.canCreate,
+        canRead: permission.canRead,
+        canUpdate: permission.canUpdate,
+        canDelete: permission.canDelete,
+        service: {
+          id: permission.serviceId,
+          name: service.name,
+        },
+      });
+    }
     for (let role of this.roles) {
       if (role.id == id) {
-        role.permissions = updatedRole.permissions.map((permission) => ({
-          id: Date.now(),
-          canCreate: permission.canCreate,
-          canRead: permission.canRead,
-          canUpdate: permission.canUpdate,
-          canDelete: permission.canDelete,
-          service: {
-            id: permission.serviceId,
-            name: "",
-          },
-        }));
+        role.permissions = permissions;
         return role;
       }
     }
