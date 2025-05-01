@@ -1,7 +1,7 @@
 "use client";
 
-import { LogOut, ShieldCheck, Users } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { FolderKanban, LogOut, ShieldCheck, Users } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +22,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ServiceName } from "@/app/(sidebar)/roles/types/type";
+import Link from "next/link";
 
 type SidebarItem = {
   name: string;
@@ -30,7 +31,6 @@ type SidebarItem = {
   service?: ServiceName;
 };
 export function AppSidebar() {
-  const router = useRouter();
   const pathname = usePathname();
 
   const handleLogout = () => {
@@ -47,6 +47,12 @@ export function AppSidebar() {
       service: "utilisateurs",
     },
     { name: "Rôles", icon: ShieldCheck, path: "/roles", service: "roles" },
+    {
+      name: "Classification",
+      icon: FolderKanban,
+      path: "/classification",
+      service: "classification",
+    },
   ];
 
   return (
@@ -68,16 +74,17 @@ export function AppSidebar() {
                 isActive={pathname === item.path}
                 tooltip={item.name}
               >
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start group-data-[collapsible=icon]:justify-center"
-                  onClick={() => router.push(item.path)}
-                >
-                  <item.icon className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
-                  <span className="group-data-[collapsible=icon]:hidden">
-                    {item.name}
-                  </span>
-                </Button>
+                <Link href={item.path}>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start group-data-[collapsible=icon]:justify-center"
+                  >
+                    <item.icon className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
+                    <span className="group-data-[collapsible=icon]:hidden">
+                      {item.name}
+                    </span>
+                  </Button>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

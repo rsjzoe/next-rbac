@@ -1,8 +1,10 @@
+import { roleService } from "../roles/service/service";
 import { UserManagement } from "./components/user-management";
 import { userService } from "./service/service";
 
 export default async function Page() {
   let users = await userService.listAll();
+  let roles = await roleService.listAll();
   return (
     <div className="flex flex-col min-h-screen">
       <header className="border-b">
@@ -11,7 +13,7 @@ export default async function Page() {
         </div>
       </header>
       <main className="flex-1 p-6">
-        <UserManagement users={users} />
+        <UserManagement users={users} roles={roles} />
       </main>
     </div>
   );

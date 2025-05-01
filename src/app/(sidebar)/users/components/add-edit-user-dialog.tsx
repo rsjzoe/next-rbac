@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { User } from "../user-type";
+import { Role } from "../../roles/types/type";
 
 type AddEditUserDialogProps = {
   open: boolean;
@@ -29,6 +30,7 @@ type AddEditUserDialogProps = {
   onSave: (user: User | Omit<User, "id">) => void;
   title: string;
   user?: User;
+  roles: Role[];
 };
 
 export function AddEditUserDialog({
@@ -37,6 +39,7 @@ export function AddEditUserDialog({
   onSave,
   title,
   user,
+  roles,
 }: AddEditUserDialogProps) {
   const [userName, setUserName] = useState(user?.userName || "");
   const [role, setRole] = useState(user?.role || "");
@@ -80,9 +83,11 @@ export function AddEditUserDialog({
                 <SelectValue placeholder="Sélectionnez un rôle" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Administrateur">Administrateur</SelectItem>
-                <SelectItem value="Éditeur">Éditeur</SelectItem>
-                <SelectItem value="Utilisateur">Utilisateur</SelectItem>
+                {roles.map((role) => (
+                  <SelectItem key={role.id} value={role.roleName}>
+                    {role.roleName}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

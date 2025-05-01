@@ -33,12 +33,14 @@ import { AddEditUserDialog } from "./add-edit-user-dialog";
 import { AlertDialogCancel } from "@radix-ui/react-alert-dialog";
 import { CreateUser, UpdateUser, User } from "../user-type";
 import { addUser, deleteUser, updateUser } from "../actions";
+import { Role } from "../../roles/types/type";
 
 interface UserManagementProps {
   users: User[];
+  roles: Role[];
 }
 
-export function UserManagement({ users }: UserManagementProps) {
+export function UserManagement({ users, roles }: UserManagementProps) {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -171,6 +173,7 @@ export function UserManagement({ users }: UserManagementProps) {
         onOpenChange={setIsAddDialogOpen}
         onSave={handleAddUser}
         title="Ajouter un utilisateur"
+        roles={roles}
       />
 
       {currentUser && (
@@ -182,6 +185,7 @@ export function UserManagement({ users }: UserManagementProps) {
           }}
           title="Modifier un utilisateur"
           user={currentUser}
+          roles={roles}
         />
       )}
 

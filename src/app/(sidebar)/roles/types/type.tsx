@@ -15,7 +15,7 @@ export type Permission = {
 
 export type Service = {
   id: number;
-  name: string;
+  name: ServiceName;
 };
 
 export type CreatePermission = {
@@ -55,9 +55,4 @@ export type HasAccessOutput = {
 
 export type ActionType = "canUpdate" | "canDelete" | "canRead" | "canCreate";
 
-export type ServiceName =
-  | "classification"
-  | "roles"
-  | "utilisateurs"
-  | "category"
-  | "corbeille";
+export type ServiceName = "classification" | "roles" | "utilisateurs";

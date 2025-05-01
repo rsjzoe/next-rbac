@@ -6,6 +6,7 @@ import { CreateUser, UpdateUser } from "./user-type";
 
 export async function addUser(user: CreateUser) {
   let newUser = await userService.addUser(user);
+  revalidatePath("/users");
   return newUser;
 }
 
@@ -17,5 +18,6 @@ export async function deleteUser(id: number) {
 
 export async function updateUser(id: number, updatedUser: UpdateUser) {
   let user = await userService.updateUserById(id, updatedUser);
+  revalidatePath("/users");
   return user;
 }
