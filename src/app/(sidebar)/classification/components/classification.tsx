@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Edit, Plus, Trash2, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AddEditClassificationDialog } from "./add-edit-classification-dialog";
+import { UserContext } from "../../users/context/user-context";
 
 // Type pour les classifications
 type Classification = {
@@ -106,6 +107,9 @@ const categories = [
 ];
 
 export function ClassificationManagement() {
+  const context = useContext(UserContext);
+  console.log("User context:", context);
+
   const [classifications, setClassifications] = useState<Classification[]>(
     initialClassifications
   );

@@ -1,16 +1,19 @@
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { PropsWithChildren } from "react";
+import { UserProvider } from "./users/context/user-provider";
 
 export default function Layout({ children }: LayoutProps) {
   return (
     <>
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <div>{children}</div>
-        </SidebarInset>
-      </SidebarProvider>
+      <UserProvider>
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarInset>
+            <div>{children}</div>
+          </SidebarInset>
+        </SidebarProvider>
+      </UserProvider>
     </>
   );
 }

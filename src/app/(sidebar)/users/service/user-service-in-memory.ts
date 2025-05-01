@@ -1,14 +1,17 @@
+import { RoleService } from "../../roles/service/role-service";
 import { CreateUser, UpdateUser, User } from "../user-type";
 import { UserService } from "./user-service";
 
 export class UserServiceInMemory implements UserService {
   private users: User[] = [];
 
+  constructor(private roleService: RoleService) {}
+
   addUser = async (user: CreateUser) => {
     const newUser: User = {
       id: Date.now(),
       userName: user.userName,
-      role: user.role,
+      role: await this.roleService.getByName(user.roleName),
     };
 
     this.users.push(newUser);
@@ -62,7 +65,7 @@ export class UserServiceInMemory implements UserService {
           user.userName = updatedUser.userName;
         }
         if (updatedUser.role) {
-          user.role = updatedUser.role;
+          user.role = await this.roleService.getByName(updatedUser.role);
         }
         return user;
       }
