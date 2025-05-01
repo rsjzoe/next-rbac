@@ -1,9 +1,8 @@
-"use client";
-
-import { SidebarInset } from "@/components/ui/sidebar";
 import { UserManagement } from "./components/user-management";
+import { userService } from "./service/service";
 
-export default function Page() {
+export default async function Page() {
+  let users = await userService.listAll();
   return (
     <div className="flex flex-col min-h-screen">
       <header className="border-b">
@@ -12,7 +11,7 @@ export default function Page() {
         </div>
       </header>
       <main className="flex-1 p-6">
-        <UserManagement />
+        <UserManagement users={users} />
       </main>
     </div>
   );

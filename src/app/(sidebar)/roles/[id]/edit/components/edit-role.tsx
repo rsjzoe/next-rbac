@@ -109,7 +109,7 @@ export function EditRole({ role, services }: EditRoleProps) {
   };
 
   return (
-    <div className="container mx-auto py-6">
+    <div className="flex-1 p-6">
       <div className="flex items-center mb-6">
         <Button
           variant="ghost"

@@ -31,50 +31,40 @@ import {
 import { Input } from "@/components/ui/input";
 import { AddEditUserDialog } from "./add-edit-user-dialog";
 import { AlertDialogCancel } from "@radix-ui/react-alert-dialog";
+import { CreateUser, UpdateUser, User } from "../user-type";
+import { addUser, deleteUser, updateUser } from "../actions";
 
-type User = {
-  id: string;
-  name: string;
-  role: string;
-};
+interface UserManagementProps {
+  users: User[];
+}
 
-export function UserManagement() {
-  const [users, setUsers] = useState<User[]>([
-    { id: "1", name: "Jean Dupont", role: "Administrateur" },
-    { id: "2", name: "Marie Martin", role: "Éditeur" },
-    { id: "3", name: "Pierre Durand", role: "Utilisateur" },
-  ]);
-
+export function UserManagement({ users }: UserManagementProps) {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const handleAddUser = (user: Omit<User, "id">) => {
-    const newUser = {
-      id: Math.random().toString(36).substring(2, 9),
-      ...user,
-    };
-    setUsers([...users, newUser]);
+  const handleAddUser = async (user: CreateUser) => {
+    await addUser(user);
     setIsAddDialogOpen(false);
   };
 
-  const handleEditUser = (user: User) => {
-    setUsers(users.map((u) => (u.id === user.id ? user : u)));
+  const handleEditUser = async (id: number, user: UpdateUser) => {
+    await updateUser(id, user);
     setIsEditDialogOpen(false);
   };
 
-  const handleDeleteUser = () => {
+  const handleDeleteUser = async () => {
     if (currentUser) {
-      setUsers(users.filter((user) => user.id !== currentUser.id));
+      await deleteUser(currentUser.id);
       setIsDeleteDialogOpen(false);
     }
   };
 
   const filteredUsers = users.filter(
     (user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.role.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -126,7 +116,9 @@ export function UserManagement() {
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
                   <TableRow key={user.id} className="hover:bg-muted/30">
-                    <TableCell className="font-medium">{user.name}</TableCell>
+                    <TableCell className="font-medium">
+                      {user.userName}
+                    </TableCell>
                     <TableCell>
                       <Badge variant={getRoleBadgeVariant(user.role)}>
                         {user.role}
@@ -186,9 +178,7 @@ export function UserManagement() {
           open={isEditDialogOpen}
           onOpenChange={setIsEditDialogOpen}
           onSave={(user) => {
-            if ("id" in user) {
-              handleEditUser(user);
-            }
+            handleEditUser(currentUser.id, user);
           }}
           title="Modifier un utilisateur"
           user={currentUser}
@@ -205,7 +195,7 @@ export function UserManagement() {
             <AlertDialogDescription>
               Cette action ne peut pas être annulée. Cela supprimera
               définitivement l'utilisateur
-              {currentUser && ` "${currentUser.name}"`} et supprimera ses
+              {currentUser && ` "${currentUser.userName}"`} et supprimera ses
               données de nos serveurs.
             </AlertDialogDescription>
           </AlertDialogHeader>

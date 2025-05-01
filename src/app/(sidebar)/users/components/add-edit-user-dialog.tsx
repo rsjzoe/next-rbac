@@ -21,12 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-type User = {
-  id: string;
-  name: string;
-  role: string;
-};
+import { User } from "../user-type";
 
 type AddEditUserDialogProps = {
   open: boolean;
@@ -43,17 +38,17 @@ export function AddEditUserDialog({
   title,
   user,
 }: AddEditUserDialogProps) {
-  const [name, setName] = useState(user?.name || "");
+  const [userName, setUserName] = useState(user?.userName || "");
   const [role, setRole] = useState(user?.role || "");
 
   const handleSave = () => {
-    if (name && role) {
+    if (userName && role) {
       if (user) {
-        onSave({ ...user, name, role });
+        onSave({ ...user, userName, role });
       } else {
-        onSave({ name, role });
+        onSave({ userName, role });
       }
-      setName("");
+      setUserName("");
       setRole("");
     }
   };
@@ -73,8 +68,8 @@ export function AddEditUserDialog({
             <Label htmlFor="name">Nom</Label>
             <Input
               id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
               placeholder="Entrez le nom de l'utilisateur"
             />
           </div>
