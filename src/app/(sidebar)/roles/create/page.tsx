@@ -17,6 +17,7 @@ import {
   Service,
 } from "@/app/(sidebar)/roles/types/type";
 import { toast } from "sonner";
+import { addRole } from "../actions";
 
 export default function CreateRolePage() {
   const router = useRouter();
@@ -102,9 +103,7 @@ export default function CreateRolePage() {
         roleName,
         permissions,
       };
-
-      await createRole(newRole);
-      // addRole(newRole);
+      await addRole(newRole);
 
       toast("Succès", {
         description: "Le rôle a été créé avec succès",
@@ -121,7 +120,7 @@ export default function CreateRolePage() {
   };
 
   return (
-    <div className="container mx-auto py-6">
+    <div className="flex-1 p-6">
       <div className="flex items-center mb-6">
         <Button
           variant="ghost"

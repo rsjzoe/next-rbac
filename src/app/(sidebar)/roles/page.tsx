@@ -1,7 +1,3 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,53 +20,57 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { toast } from "sonner";
-import { getRoles, deleteRole } from "@/lib/actions";
-import { useRole } from "./hooks/use-role";
+import { roleService } from "./service/service";
+import Link from "next/link";
 
-export default function RolesPage() {
-  const [isLoading, setIsLoading] = useState(true);
-  const roles = useRole((state) => state.roles);
-  const setRoles = useRole((state) => state.setRoles);
-  const router = useRouter();
+export default async function RolesPage() {
+  const roles = await roleService.listAll();
+  console.log(roles);
+
+  // const [isLoading, setIsLoading] = useState(true);
+  // const roles = useRole((state) => state.roles);
+  // const setRoles = useRole((state) => state.setRoles);
+  // const router = useRouter();
   // const { addRole, deleteRole, roles, updateRole } = useRoleLocal();
 
-  useEffect(() => {
-    const fetchRoles = async () => {
-      try {
-        const data = await getRoles();
-        setRoles(data);
-      } catch (error) {
-        toast("Erreur", {
-          description: "Impossible de charger les rôles",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchRoles = async () => {
+  //     try {
+  //       const data = await getRoles();
+  //       setRoles(data);
+  //     } catch (error) {
+  //       toast("Erreur", {
+  //         description: "Impossible de charger les rôles",
+  //       });
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-    fetchRoles();
-  }, []);
+  //   fetchRoles();
+  // }, []);
 
-  const handleDelete = async (id: number) => {
-    try {
-      await deleteRole(id);
-      setRoles(roles.filter((role) => role.id !== id));
-      toast("Succès", { description: "Le rôle a été supprimé avec succès" });
-    } catch (error) {
-      toast("Erreur", {
-        description: "Impossible de supprimer le rôle",
-      });
-    }
-  };
+  // const handleDelete = async (id: number) => {
+  //   try {
+  //     await deleteRole(id);
+  //     setRoles(roles.filter((role) => role.id !== id));
+  //     toast("Succès", { description: "Le rôle a été supprimé avec succès" });
+  //   } catch (error) {
+  //     toast("Erreur", {
+  //       description: "Impossible de supprimer le rôle",
+  //     });
+  //   }
+  // };
 
   return (
-    <div className="container mx-auto py-6">
+    <div className="flex-1 p-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">Gestion des Rôles</h1>
-        <Button onClick={() => router.push("/roles/create")}>
-          <Plus className="mr-2 h-4 w-4" /> Ajouter un rôle
-        </Button>
+        <Link href={"/roles/create"}>
+          <Button>
+            <Plus className="mr-2 h-4 w-4" /> Ajouter un rôle
+          </Button>
+        </Link>
       </div>
 
       <Card>
@@ -78,11 +78,7 @@ export default function RolesPage() {
           <CardTitle>Liste des rôles</CardTitle>
         </CardHeader>
         <CardContent>
-          {isLoading ? (
-            <div className="flex justify-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-            </div>
-          ) : roles.length === 0 ? (
+          {roles.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               Aucun rôle trouvé. Créez votre premier rôle.
             </div>
@@ -107,14 +103,12 @@ export default function RolesPage() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => router.push(`/roles/${role.id}/edit`)}
-                        >
-                          <Pencil className="h-4 w-4 mr-1" />
-                          Modifier
-                        </Button>
+                        <Link href={`/roles/${role.id}/edit`}>
+                          <Button variant="outline" size="sm">
+                            <Pencil className="h-4 w-4 mr-1" />
+                            Modifier
+                          </Button>
+                        </Link>
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
                             <Button
@@ -142,7 +136,7 @@ export default function RolesPage() {
                               <AlertDialogCancel>Annuler</AlertDialogCancel>
                               <AlertDialogAction
                                 className="bg-red-500 hover:bg-red-600"
-                                onClick={() => handleDelete(role.id)}
+                                // onClick={() => handleDelete(role.id)}
                               >
                                 Supprimer
                               </AlertDialogAction>
