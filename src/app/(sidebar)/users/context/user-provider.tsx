@@ -1,10 +1,10 @@
 "use client";
 
 import { PropsWithChildren } from "react";
-import { UserContext } from "./user-context";
+import { UserConnected, UserContext } from "./user-context";
 import { User } from "../user-type";
 
-export function UserProvider({ children }: UserProviderProps) {
+export function UserProvider({ children, userConnected }: UserProviderProps) {
   let user: User = {
     userName: "rak",
     id: 1,
@@ -28,27 +28,11 @@ export function UserProvider({ children }: UserProviderProps) {
   };
   return (
     <>
-      <UserContext.Provider
-        value={{
-          user,
-          hasAccess(serviceName, action) {
-            for (let permisssion of user.role.permissions) {
-              if (permisssion.service.name == serviceName) {
-                // if (action == "canCreate") {
-                //   return permisssion["canCreate"];
-                // }
-                // permission["canCreate"] , permission["canRead"] , permission["canUpdate"] , permission["canDelete"]
-                return permisssion[action];
-              }
-            }
-            return false;
-          },
-        }}
-      >
+      <UserContext.Provider value={userConnected}>
         {children}
       </UserContext.Provider>
     </>
   );
 }
 
-type UserProviderProps = PropsWithChildren<{}>;
+type UserProviderProps = PropsWithChildren<{ userConnected: UserConnected }>;
