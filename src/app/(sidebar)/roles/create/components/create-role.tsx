@@ -1,5 +1,4 @@
 "use client";
-
 import type React from "react";
 
 import { useState, useEffect } from "react";
@@ -11,42 +10,33 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Role,
+  CreatePermission,
+  CreateRole,
   Service,
-  UpdatePermission,
 } from "@/app/(sidebar)/roles/types/type";
 import { toast } from "sonner";
-import { updateRole } from "../../../actions";
+import { addRole } from "../../actions";
 
-interface EditRoleProps {
-  role: Role;
+interface CreateRoleProps {
   services: Service[];
 }
-
-export function EditRole({ role, services }: EditRoleProps) {
+export function CreateRoleClient({ services }: CreateRoleProps) {
   const router = useRouter();
   const [roleName, setRoleName] = useState("");
-
-  const [permissions, setPermissions] = useState<UpdatePermission[]>([]);
+  const [permissions, setPermissions] = useState<CreatePermission[]>([]);
   const [isSaving, setIsSaving] = useState(false);
+  // const addRole = useRole((state) => state.addRole);
 
   useEffect(() => {
-    setRoleName(role.roleName);
-
-    // Initialize permissions based on role data
-    const initialPermissions = services.map((service) => {
-      const existingPermission = role.permissions.find(
-        (p) => p.service.id === service.id
-      );
-
-      return {
+    const initialPermissions: CreatePermission[] = services.map(
+      (service: Service): CreatePermission => ({
         serviceId: service.id,
-        canCreate: existingPermission?.canCreate || false,
-        canRead: existingPermission?.canRead || false,
-        canUpdate: existingPermission?.canUpdate || false,
-        canDelete: existingPermission?.canDelete || false,
-      };
-    });
+        canCreate: false,
+        canRead: false,
+        canUpdate: false,
+        canDelete: false,
+      })
+    );
 
     setPermissions(initialPermissions);
   }, []);
@@ -94,22 +84,28 @@ export function EditRole({ role, services }: EditRoleProps) {
     setIsSaving(true);
 
     try {
-      await updateRole(role.id, { permissions });
+      const newRole: CreateRole = {
+        roleName,
+        permissions,
+      };
+      await addRole(newRole);
 
       toast("Succès", {
-        description: "Le rôle a été mis à jour avec succès",
+        description: "Le rôle a été créé avec succès",
       });
 
       router.push("/roles");
     } catch (error) {
-      toast("Erreur", { description: "Impossible de mettre à jour le rôle" });
+      toast("Erreur", {
+        description: "Impossible de créer le rôle",
+      });
     } finally {
       setIsSaving(false);
     }
   };
 
   return (
-    <div className="container mx-auto py-6">
+    <div className="flex-1 p-6">
       <div className="flex items-center mb-6">
         <Button
           variant="ghost"
@@ -119,7 +115,7 @@ export function EditRole({ role, services }: EditRoleProps) {
           <ArrowLeft className="h-4 w-4 mr-2" />
           Retour
         </Button>
-        <h1 className="text-3xl font-bold">Modifier le rôle</h1>
+        <h1 className="text-3xl font-bold">Créer un nouveau rôle</h1>
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -137,11 +133,7 @@ export function EditRole({ role, services }: EditRoleProps) {
                   value={roleName}
                   onChange={(e) => setRoleName(e.target.value)}
                   required
-                  disabled
                 />
-                <p className="text-sm text-muted-foreground">
-                  Le nom du rôle ne peut pas être modifié
-                </p>
               </div>
             </div>
           </CardContent>
