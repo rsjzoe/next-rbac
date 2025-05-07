@@ -67,7 +67,7 @@ export function UserManagement({ users, roles }: UserManagementProps) {
   const filteredUsers = users.filter(
     (user) =>
       user.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.role.toLowerCase().includes(searchTerm.toLowerCase())
+      user.role.roleName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const getRoleBadgeVariant = (role: string) => {
@@ -122,8 +122,8 @@ export function UserManagement({ users, roles }: UserManagementProps) {
                       {user.userName}
                     </TableCell>
                     <TableCell>
-                      <Badge variant={getRoleBadgeVariant(user.role)}>
-                        {user.role}
+                      <Badge variant={getRoleBadgeVariant(user.role.roleName)}>
+                        {user.role.roleName}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
@@ -171,7 +171,9 @@ export function UserManagement({ users, roles }: UserManagementProps) {
       <AddEditUserDialog
         open={isAddDialogOpen}
         onOpenChange={setIsAddDialogOpen}
-        onSave={handleAddUser}
+        onSave={(user) => {
+          handleAddUser(user as CreateUser);
+        }}
         title="Ajouter un utilisateur"
         roles={roles}
       />
