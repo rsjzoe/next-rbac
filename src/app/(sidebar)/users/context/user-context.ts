@@ -2,11 +2,7 @@ import { createContext } from "react";
 import { User } from "../user-type";
 import { ActionType, ServiceName } from "../../roles/types/type";
 
-type UserContextType = UserConnected;
-
-export const UserContext = createContext<UserContextType>(
-  {} as UserContextType
-);
+export const UserContext = createContext<UserConnected>({} as UserConnected);
 
 export type UserConnected = {
   user: User | null;
