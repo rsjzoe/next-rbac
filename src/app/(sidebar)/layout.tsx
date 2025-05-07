@@ -5,9 +5,10 @@ import { UserProvider } from "./users/context/user-provider";
 import { getUserConnected } from "./users/get-user-connected";
 
 export default function Layout({ children }: LayoutProps) {
+  let userConnected = getUserConnected();
   return (
     <>
-      <UserProvider userConnected={getUserConnected()}>
+      <UserProvider user={userConnected.user}>
         <SidebarProvider>
           <AppSidebar />
           <SidebarInset>

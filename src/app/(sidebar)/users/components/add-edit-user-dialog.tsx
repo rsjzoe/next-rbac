@@ -21,13 +21,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { User } from "../user-type";
+import { CreateUser, UpdateUser, User } from "../user-type";
 import { Role } from "../../roles/types/type";
 
 type AddEditUserDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave: (user: User | Omit<User, "id">) => void;
+  onSave: (user: CreateUser | UpdateUser) => void;
   title: string;
   user?: User;
   roles: Role[];
@@ -42,17 +42,17 @@ export function AddEditUserDialog({
   roles,
 }: AddEditUserDialogProps) {
   const [userName, setUserName] = useState(user?.userName || "");
-  const [role, setRole] = useState(user?.role || "");
+  const [roleName, setRoleName] = useState(user?.role.roleName || "");
 
   const handleSave = () => {
-    if (userName && role) {
+    if (userName && roleName) {
       if (user) {
-        onSave({ ...user, userName, role });
+        onSave({ ...user, userName, roleName });
       } else {
-        onSave({ userName, role });
+        onSave({ userName, roleName });
       }
       setUserName("");
-      setRole("");
+      setRoleName("");
     }
   };
 
@@ -78,7 +78,7 @@ export function AddEditUserDialog({
           </div>
           <div className="grid gap-2">
             <Label htmlFor="role">Rôle</Label>
-            <Select value={role} onValueChange={setRole}>
+            <Select value={roleName} onValueChange={setRoleName}>
               <SelectTrigger id="role">
                 <SelectValue placeholder="Sélectionnez un rôle" />
               </SelectTrigger>
