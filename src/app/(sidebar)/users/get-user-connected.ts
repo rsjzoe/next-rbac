@@ -20,6 +20,28 @@ export function getUserConnected(): UserConnected {
             name: "utilisateurs",
           },
         },
+        {
+          id: 1,
+          canUpdate: true,
+          canDelete: true,
+          canRead: true,
+          canCreate: true,
+          service: {
+            id: 1,
+            name: "classification",
+          },
+        },
+        {
+          id: 1,
+          canUpdate: true,
+          canDelete: true,
+          canRead: true,
+          canCreate: true,
+          service: {
+            id: 1,
+            name: "roles",
+          },
+        },
       ],
     },
   };
