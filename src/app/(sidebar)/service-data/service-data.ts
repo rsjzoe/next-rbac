@@ -1,4 +1,4 @@
-import { ServiceDataInMemory } from "./service-data-in-memory";
 import { ServiceDataService } from "./service-data-service";
+import { ServicePrisma } from "./service-prisma";
 
-export const serviceData: ServiceDataService = new ServiceDataInMemory();
+export const serviceData: ServiceDataService = new ServicePrisma();
