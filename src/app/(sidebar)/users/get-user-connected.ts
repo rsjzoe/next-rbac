@@ -17,7 +17,7 @@ export function getUserConnected(): UserConnected {
           canCreate: true,
           service: {
             id: 1,
-            name: "roles",
+            name: "utilisateurs",
           },
         },
       ],

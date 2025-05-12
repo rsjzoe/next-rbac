@@ -34,6 +34,7 @@ import { AlertDialogCancel } from "@radix-ui/react-alert-dialog";
 import { CreateUser, UpdateUser, User } from "../user-type";
 import { addUser, deleteUser, updateUser } from "../actions";
 import { Role } from "../../roles/types/type";
+import { useUserConnected } from "../context/use-user-connected";
 
 interface UserManagementProps {
   users: User[];
@@ -46,6 +47,7 @@ export function UserManagement({ users, roles }: UserManagementProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const { hasAccess } = useUserConnected();
 
   const handleAddUser = async (user: CreateUser) => {
     await addUser(user);
@@ -92,9 +94,11 @@ export function UserManagement({ users, roles }: UserManagementProps) {
             Gérez les utilisateurs et leurs rôles dans le système.
           </CardDescription>
         </div>
-        <Button onClick={() => setIsAddDialogOpen(true)}>
-          Ajouter un utilisateur
-        </Button>
+        {hasAccess("utilisateurs", "canCreate") && (
+          <Button onClick={() => setIsAddDialogOpen(true)}>
+            Ajouter un utilisateur
+          </Button>
+        )}
       </CardHeader>
       <CardContent className="p-6">
         <div className="mb-4">
@@ -111,7 +115,10 @@ export function UserManagement({ users, roles }: UserManagementProps) {
               <TableRow className="bg-muted/50 hover:bg-muted/50">
                 <TableHead className="w-[40%]">Nom</TableHead>
                 <TableHead className="w-[40%]">Rôle</TableHead>
-                <TableHead className="w-[20%] text-right">Actions</TableHead>
+                {(hasAccess("utilisateurs", "canUpdate") ||
+                  hasAccess("utilisateurs", "canDelete")) && (
+                  <TableHead className="w-[20%] text-right">Actions</TableHead>
+                )}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -128,30 +135,34 @@ export function UserManagement({ users, roles }: UserManagementProps) {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end space-x-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setCurrentUser(user);
-                            setIsEditDialogOpen(true);
-                          }}
-                          className="h-8 w-8 p-0"
-                        >
-                          <Edit className="h-4 w-4" />
-                          <span className="sr-only">Modifier</span>
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setCurrentUser(user);
-                            setIsDeleteDialogOpen(true);
-                          }}
-                          className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Supprimer</span>
-                        </Button>
+                        {hasAccess("utilisateurs", "canUpdate") && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setCurrentUser(user);
+                              setIsEditDialogOpen(true);
+                            }}
+                            className="h-8 w-8 p-0"
+                          >
+                            <Edit className="h-4 w-4" />
+                            <span className="sr-only">Modifier</span>
+                          </Button>
+                        )}
+                        {hasAccess("utilisateurs", "canDelete") && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setCurrentUser(user);
+                              setIsDeleteDialogOpen(true);
+                            }}
+                            className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                            <span className="sr-only">Supprimer</span>
+                          </Button>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>

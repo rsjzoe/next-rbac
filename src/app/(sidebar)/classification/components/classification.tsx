@@ -246,7 +246,10 @@ export function ClassificationManagement() {
                 <TableHead className="w-[15%]">Catégorie</TableHead>
                 <TableHead className="w-[10%]">Statut</TableHead>
                 <TableHead className="w-[10%]">Date de création</TableHead>
-                <TableHead className="w-[10%] text-right">Actions</TableHead>
+                {hasAccess("classification", "canUpdate") ||
+                hasAccess("classification", "canDelete") ? (
+                  <TableHead className="w-[10%] text-right">Actions</TableHead>
+                ) : null}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -275,34 +278,41 @@ export function ClassificationManagement() {
                       </Badge>
                     </TableCell>
                     <TableCell>{classification.createdAt}</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end space-x-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setCurrentClassification(classification);
-                            setIsEditDialogOpen(true);
-                          }}
-                          className="h-8 w-8 p-0"
-                        >
-                          <Edit className="h-4 w-4" />
-                          <span className="sr-only">Modifier</span>
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setCurrentClassification(classification);
-                            setIsDeleteDialogOpen(true);
-                          }}
-                          className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Supprimer</span>
-                        </Button>
-                      </div>
-                    </TableCell>
+                    {hasAccess("classification", "canUpdate") ||
+                    hasAccess("classification", "canDelete") ? (
+                      <TableCell className="text-right">
+                        <div className="flex justify-end space-x-2">
+                          {hasAccess("classification", "canUpdate") && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setCurrentClassification(classification);
+                                setIsEditDialogOpen(true);
+                              }}
+                              className="h-8 w-8 p-0"
+                            >
+                              <Edit className="h-4 w-4" />
+                              <span className="sr-only">Modifier</span>
+                            </Button>
+                          )}
+                          {hasAccess("classification", "canDelete") && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setCurrentClassification(classification);
+                                setIsDeleteDialogOpen(true);
+                              }}
+                              className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              <span className="sr-only">Supprimer</span>
+                            </Button>
+                          )}
+                        </div>
+                      </TableCell>
+                    ) : null}
                   </TableRow>
                 ))
               ) : (

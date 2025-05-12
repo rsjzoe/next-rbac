@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/tooltip";
 import { ServiceName } from "@/app/(sidebar)/roles/types/type";
 import Link from "next/link";
+import { use } from "react";
+import { useUserConnected } from "@/app/(sidebar)/users/context/use-user-connected";
 
 type SidebarItem = {
   name: string;
@@ -32,13 +34,13 @@ type SidebarItem = {
 };
 export function AppSidebar() {
   const pathname = usePathname();
+  const { hasAccess } = useUserConnected();
 
   const handleLogout = () => {
     // Ici, vous pourriez implémenter la logique de déconnexion
     console.log("Déconnexion");
     // router.push("/login")
   };
-
   const mainItems: SidebarItem[] = [
     {
       name: "Utilisateurs",
@@ -67,27 +69,29 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent className="p-2">
         <SidebarMenu>
-          {mainItems.map((item) => (
-            <SidebarMenuItem key={item.name}>
-              <SidebarMenuButton
-                asChild
-                isActive={pathname === item.path}
-                tooltip={item.name}
-              >
-                <Link href={item.path}>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start group-data-[collapsible=icon]:justify-center"
-                  >
-                    <item.icon className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
-                    <span className="group-data-[collapsible=icon]:hidden">
-                      {item.name}
-                    </span>
-                  </Button>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          {mainItems.map((item) =>
+            item.service && hasAccess(item.service, "canRead") ? (
+              <SidebarMenuItem key={item.name}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === item.path}
+                  tooltip={item.name}
+                >
+                  <Link href={item.path}>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start group-data-[collapsible=icon]:justify-center"
+                    >
+                      <item.icon className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
+                      <span className="group-data-[collapsible=icon]:hidden">
+                        {item.name}
+                      </span>
+                    </Button>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ) : null
+          )}
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="border-t p-4 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-2">
