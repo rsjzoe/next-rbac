@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,8 +12,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LockIcon, MailIcon } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
       <Card className="w-full max-w-md shadow-lg">
@@ -37,6 +43,8 @@ export default function LoginPage() {
                 id="email"
                 type="email"
                 placeholder="exemple@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="pl-10"
                 required
               />
@@ -52,16 +60,26 @@ export default function LoginPage() {
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
                 <LockIcon className="h-4 w-4" />
               </div>
-              <Input id="password" type="password" className="pl-10" required />
+              <Input
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                className="pl-10"
+                required
+              />
             </div>
           </div>
         </CardContent>
         <CardFooter>
-          <Link href="/users" className="w-full">
-            <Button className="w-full cursor-pointer bg-primary hover:bg-[#2DD4BF]/90">
-              Se connecter
-            </Button>
-          </Link>
+          {/* <Link href="/users" className="w-full"> */}
+          <Button
+            onClick={() => signIn()}
+            className="w-full cursor-pointer bg-primary hover:bg-[#2DD4BF]/90"
+          >
+            Se connecter
+          </Button>
+          {/* </Link> */}
         </CardFooter>
       </Card>
     </div>

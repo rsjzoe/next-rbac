@@ -11,7 +11,9 @@ export class UserServicePrisma implements UserService {
     const role = await this.roleService.getByName(user.roleName);
     return await prisma.user.create({
       data: {
-        userName: user.userName,
+        name: user.name,
+        email: user.email,
+        password: user.password,
         role: {
           connect: {
             id: role.id,
@@ -88,7 +90,7 @@ export class UserServicePrisma implements UserService {
 
   async getByName(name: string): Promise<User> {
     const user = await prisma.user.findFirst({
-      where: { userName: name },
+      where: { name: name },
       include: {
         role: {
           include: {
@@ -107,6 +109,27 @@ export class UserServicePrisma implements UserService {
     return user;
   }
 
+  async getByEmail(email: string): Promise<User> {
+    const user = await prisma.user.findFirst({
+      where: { email: email },
+      include: {
+        role: {
+          include: {
+            permissions: {
+              include: {
+                service: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!user) {
+      throw new Error(`User with email ${email} not found`);
+    }
+    return user;
+  }
+
   async updateUserById(id: number, updatedUser: UpdateUser): Promise<User> {
     let role: Role | null = null;
     if (updatedUser.role) {
@@ -116,7 +139,7 @@ export class UserServicePrisma implements UserService {
     return await prisma.user.update({
       where: { id },
       data: {
-        userName: updatedUser.userName,
+        name: updatedUser.name,
         role: role
           ? {
               connect: {
