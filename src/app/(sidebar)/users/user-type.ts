@@ -1,17 +1,15 @@
 import { Role } from "../roles/types/type";
 
 export type User = {
-  id: number;
+  id: string;
   name: string | null;
   email: string;
-  password: string | null;
   role: Role;
 };
 
 export type CreateUser = {
   name: string;
   email: string;
-  password: string;
   roleName: string;
 };
 

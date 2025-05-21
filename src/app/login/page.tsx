@@ -11,9 +11,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LockIcon, MailIcon } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -70,11 +70,48 @@ export default function LoginPage() {
               />
             </div>
           </div>
+
+          <div className="">
+            <Link href={"/signUp"}>S'inscrire</Link>
+          </div>
         </CardContent>
         <CardFooter>
           {/* <Link href="/users" className="w-full"> */}
           <Button
-            onClick={() => signIn()}
+            onClick={() => {
+              authClient.signIn.email(
+                {
+                  /**
+                   * The user email
+                   */
+                  email,
+                  /**
+                   * The user password
+                   */
+                  password,
+                  /**
+                   * A URL to redirect to after the user verifies their email (optional)
+                   */
+                  callbackURL: "/users",
+                  /**
+                   * remember the user session after the browser is closed.
+                   * @default true
+                   */
+                  rememberMe: false,
+                },
+                {
+                  onError(context) {
+                    console.log(context);
+                  },
+                  onSuccess(context) {
+                    console.log("Connexion réussie", context);
+                  },
+                  onRequest(context) {
+                    console.log("Demande de connexion", context);
+                  },
+                }
+              );
+            }}
             className="w-full cursor-pointer bg-primary hover:bg-[#2DD4BF]/90"
           >
             Se connecter

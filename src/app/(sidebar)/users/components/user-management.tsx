@@ -54,7 +54,7 @@ export function UserManagement({ users, roles }: UserManagementProps) {
     setIsAddDialogOpen(false);
   };
 
-  const handleEditUser = async (id: number, user: UpdateUser) => {
+  const handleEditUser = async (id: string, user: UpdateUser) => {
     await updateUser(id, user);
     setIsEditDialogOpen(false);
   };
@@ -68,7 +68,7 @@ export function UserManagement({ users, roles }: UserManagementProps) {
 
   const filteredUsers = users.filter(
     (user) =>
-      user.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.role.roleName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -125,9 +125,7 @@ export function UserManagement({ users, roles }: UserManagementProps) {
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
                   <TableRow key={user.id} className="hover:bg-muted/30">
-                    <TableCell className="font-medium">
-                      {user.userName}
-                    </TableCell>
+                    <TableCell className="font-medium">{user.name}</TableCell>
                     <TableCell>
                       <Badge variant={getRoleBadgeVariant(user.role.roleName)}>
                         {user.role.roleName}
@@ -212,7 +210,7 @@ export function UserManagement({ users, roles }: UserManagementProps) {
             <AlertDialogDescription>
               Cette action ne peut pas être annulée. Cela supprimera
               définitivement l'utilisateur
-              {currentUser && ` "${currentUser.userName}"`} et supprimera ses
+              {currentUser && ` "${currentUser.name}"`} et supprimera ses
               données de nos serveurs.
             </AlertDialogDescription>
           </AlertDialogHeader>

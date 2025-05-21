@@ -7,10 +7,11 @@ export class UserServiceInMemory implements UserService {
 
   constructor(private roleService: RoleService) {}
 
-  addUser = async (user: CreateUser) => {
+  addUser = async (user: CreateUser): Promise<User> => {
     const newUser: User = {
-      id: Date.now(),
-      userName: user.userName,
+      id: Date.now().toString(),
+      name: user.name,
+      email: user.email,
       role: await this.roleService.getByName(user.roleName),
     };
 
@@ -19,15 +20,14 @@ export class UserServiceInMemory implements UserService {
     return newUser;
   };
 
-  delete = async (id: number) => {
+  delete = async (id: string): Promise<User> => {
     const newUsers: User[] = [];
     let userToDelete: User | null = null;
 
     for (let user of this.users) {
-      if (user.id == id) {
+      if (user.id === id) {
         userToDelete = user;
-      }
-      if (user.id != id) {
+      } else {
         newUsers.push(user);
       }
     }
@@ -38,11 +38,11 @@ export class UserServiceInMemory implements UserService {
     return userToDelete;
   };
 
-  listAll = async () => {
+  listAll = async (): Promise<User[]> => {
     return this.users;
   };
 
-  getById = async (id: number) => {
+  getById = async (id: string): Promise<User> => {
     const user = this.users.find((user) => user.id === id);
     if (!user) {
       throw new Error(`User with ID ${id} not found`);
@@ -50,21 +50,35 @@ export class UserServiceInMemory implements UserService {
     return user;
   };
 
-  getByName = async (name: string) => {
-    const user = this.users.find((user) => user.userName === name);
+  getByName = async (name: string): Promise<User> => {
+    const user = this.users.find((user) => user.name === name);
     if (!user) {
       throw new Error(`User with name ${name} not found`);
     }
     return user;
   };
 
-  updateUserById = async (id: number, updatedUser: UpdateUser) => {
+  getByEmail = async (email: string): Promise<User> => {
+    const user = this.users.find((user) => user.email === email);
+    if (!user) {
+      throw new Error(`User with email ${email} not found`);
+    }
+    return user;
+  };
+
+  updateUserById = async (
+    id: string,
+    updatedUser: UpdateUser
+  ): Promise<User> => {
     for (let user of this.users) {
-      if (user.id == id) {
-        if (updatedUser.userName) {
-          user.userName = updatedUser.userName;
+      if (user.id === id) {
+        if (updatedUser.name !== undefined) {
+          user.name = updatedUser.name;
         }
-        if (updatedUser.role) {
+        if (updatedUser.email !== undefined) {
+          user.email = updatedUser.email;
+        }
+        if (updatedUser.role !== undefined) {
           user.role = await this.roleService.getByName(updatedUser.role);
         }
         return user;

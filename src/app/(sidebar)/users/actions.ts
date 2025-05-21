@@ -10,13 +10,13 @@ export async function addUser(user: CreateUser) {
   return newUser;
 }
 
-export async function deleteUser(id: number) {
+export async function deleteUser(id: string) {
   let deletedUser = await userService.delete(id);
   revalidatePath("/users");
   return deletedUser;
 }
 
-export async function updateUser(id: number, updatedUser: UpdateUser) {
+export async function updateUser(id: string, updatedUser: UpdateUser) {
   let user = await userService.updateUserById(id, updatedUser);
   revalidatePath("/users");
   return user;

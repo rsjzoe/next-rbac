@@ -3,6 +3,7 @@ import { CreateUser, User, UpdateUser } from "../user-type";
 import { UserService } from "./user-service";
 import { RoleService } from "../../roles/service/role-service";
 import { Role } from "../../roles/types/type";
+import { hashPassword } from "@/lib/password";
 
 export class UserServicePrisma implements UserService {
   constructor(private roleService: RoleService) {}
@@ -13,10 +14,22 @@ export class UserServicePrisma implements UserService {
       data: {
         name: user.name,
         email: user.email,
-        password: user.password,
+        createdAt: new Date(),
+        emailVerified: true,
+        updatedAt: new Date(),
         role: {
           connect: {
             id: role.id,
+          },
+        },
+        accounts: {
+          create: {
+            id: Date.now().toString(),
+            accountId: Date.now().toString(),
+            providerId: "credential",
+            password: await hashPassword("0000"),
+            createdAt: new Date(),
+            updatedAt: new Date(),
           },
         },
       },
@@ -34,7 +47,7 @@ export class UserServicePrisma implements UserService {
     });
   }
 
-  async delete(id: number): Promise<User> {
+  async delete(id: string): Promise<User> {
     return await prisma.user.delete({
       where: { id },
       include: {
@@ -67,7 +80,7 @@ export class UserServicePrisma implements UserService {
     });
   }
 
-  async getById(id: number): Promise<User> {
+  async getById(id: string): Promise<User> {
     const user = await prisma.user.findUnique({
       where: { id },
       include: {
@@ -130,7 +143,7 @@ export class UserServicePrisma implements UserService {
     return user;
   }
 
-  async updateUserById(id: number, updatedUser: UpdateUser): Promise<User> {
+  async updateUserById(id: string, updatedUser: UpdateUser): Promise<User> {
     let role: Role | null = null;
     if (updatedUser.role) {
       role = await this.roleService.getByName(updatedUser.role);

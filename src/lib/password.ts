@@ -1,4 +1,10 @@
 import bcrypt from "bcrypt";
+import { auth } from "./auth";
+
+export async function hashPassword(password: string) {
+  const hashedPassword = await (await auth.$context).password.hash(password);
+  return hashedPassword;
+}
 
 export async function saltAndHashPassword(
   password: string,

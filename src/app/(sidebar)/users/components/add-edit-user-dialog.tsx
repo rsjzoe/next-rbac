@@ -41,15 +41,16 @@ export function AddEditUserDialog({
   user,
   roles,
 }: AddEditUserDialogProps) {
-  const [userName, setUserName] = useState(user?.userName || "");
+  const [userName, setUserName] = useState(user?.name || "");
+  const [userEmail, setUserEmail] = useState(user?.email || "");
   const [roleName, setRoleName] = useState(user?.role.roleName || "");
 
   const handleSave = () => {
     if (userName && roleName) {
       if (user) {
-        onSave({ ...user, userName, roleName });
+        onSave({ ...user, name: userName, roleName, email: userEmail });
       } else {
-        onSave({ userName, roleName });
+        onSave({ name: userName, roleName, email: userEmail });
       }
       setUserName("");
       setRoleName("");
@@ -67,6 +68,15 @@ export function AddEditUserDialog({
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
+          <div className="grid gap-2">
+            <Label htmlFor="name">Email</Label>
+            <Input
+              id="email"
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
+              placeholder="Entrez l'email de l'utilisateur"
+            />
+          </div>
           <div className="grid gap-2">
             <Label htmlFor="name">Nom</Label>
             <Input
