@@ -101,10 +101,8 @@ async function main() {
 }
 
 export function createSuperadmin() {
-  main()
-    .catch((e) => {
-      console.error("Erreur lors de la création du rôle superadmin:", e);
-      process.exit(1);
-    })
-    .finally(async () => {});
+  main().catch((e) => {
+    console.error("Erreur lors de la création du rôle superadmin:", e);
+    process.exit(1);
+  });
 }
