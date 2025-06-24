@@ -7,7 +7,7 @@
     "build": "prisma generate --no-engine && next build",
     "start": "next start",
     "migrate": "prisma migrate dev",
-    "lint": "next lint"
+    "lint": "tsc --noEmit && next lint"
   },
   "dependencies": {
     "@prisma/client": "^6.7.0",

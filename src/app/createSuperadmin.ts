@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import { auth } from "@/lib/auth";
 import { serviceData } from "./(sidebar)/service-data/service-data";
 import { ServiceName } from "./(sidebar)/roles/types/type";
 import { roleService } from "./(sidebar)/roles/service/service";
@@ -20,7 +19,6 @@ async function main() {
   const serviceUser = await createService("utilisateurs");
   const serviceRole = await createService("roles");
   const serviceClassification = await createService("classification");
-  // Créer le rôle superadmin
   let superadminRole;
   try {
     superadminRole = await roleService.getByName("superadmin");

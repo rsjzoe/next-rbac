@@ -6,7 +6,7 @@ import { userService } from "./service/service";
 export default async function Page() {
   let users = await userService.listAll();
   let roles = await roleService.listAll();
-  const { hasAccess } = getUserConnected();
+  const { hasAccess } = await getUserConnected();
 
   if (!hasAccess("utilisateurs", "canRead")) {
     return (

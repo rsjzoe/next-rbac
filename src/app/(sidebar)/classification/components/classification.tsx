@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Edit, Plus, Trash2, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -39,7 +39,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AddEditClassificationDialog } from "./add-edit-classification-dialog";
-import { UserContext } from "../../users/context/user-context";
 import { useUserConnected } from "../../users/context/use-user-connected";
 
 // Type pour les classifications

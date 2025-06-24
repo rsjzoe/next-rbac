@@ -1,50 +1,18 @@
+import { auth } from "@/lib/auth";
 import { UserConnected } from "./context/user-context";
-import { User } from "./user-type";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { userService } from "./service/service";
 
-export function getUserConnected(): UserConnected {
-  let user: User = {
-    userName: "rak",
-    id: 1,
-    role: {
-      id: 1,
-      roleName: "admin",
-      permissions: [
-        {
-          id: 1,
-          canUpdate: true,
-          canDelete: true,
-          canRead: true,
-          canCreate: true,
-          service: {
-            id: 1,
-            name: "utilisateurs",
-          },
-        },
-        {
-          id: 1,
-          canUpdate: true,
-          canDelete: true,
-          canRead: true,
-          canCreate: true,
-          service: {
-            id: 1,
-            name: "classification",
-          },
-        },
-        {
-          id: 1,
-          canUpdate: true,
-          canDelete: true,
-          canRead: true,
-          canCreate: true,
-          service: {
-            id: 1,
-            name: "roles",
-          },
-        },
-      ],
-    },
-  };
+export async function getUserConnected(): Promise<UserConnected> {
+  const session = await auth.api.getSession({
+    headers: await headers(), // you need to pass the headers object.
+  });
+  if (!session) {
+    redirect("/login");
+  }
+  const user = await userService.getById(session.session.id);
+
   return {
     user,
     hasAccess(serviceName, action) {

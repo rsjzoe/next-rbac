@@ -1,8 +1,8 @@
 import { getUserConnected } from "../users/get-user-connected";
 import { ClassificationManagement } from "./components/classification";
 
-export default function Page({}: PageProps) {
-  const { hasAccess } = getUserConnected();
+export default async function Page({}: PageProps) {
+  const { hasAccess } = await getUserConnected();
   if (!hasAccess("classification", "canRead")) {
     return (
       <div className="flex-1 p-6">

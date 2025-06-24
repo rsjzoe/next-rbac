@@ -17,7 +17,7 @@ import { getUserConnected } from "../users/get-user-connected";
 
 export default async function RolesPage() {
   const roles = await roleService.listAll();
-  const { hasAccess } = getUserConnected();
+  const { hasAccess } = await getUserConnected();
   if (hasAccess("roles", "canRead")) {
     return (
       <div className="flex-1 p-6">
