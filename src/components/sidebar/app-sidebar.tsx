@@ -23,8 +23,8 @@ import {
 } from "@/components/ui/tooltip";
 import { ServiceName } from "@/app/(sidebar)/roles/types/type";
 import Link from "next/link";
-import { use } from "react";
 import { useUserConnected } from "@/app/(sidebar)/users/context/use-user-connected";
+import { authClient } from "@/lib/auth-client";
 
 type SidebarItem = {
   name: string;
@@ -37,9 +37,7 @@ export function AppSidebar() {
   const { hasAccess } = useUserConnected();
 
   const handleLogout = () => {
-    // Ici, vous pourriez implémenter la logique de déconnexion
-    console.log("Déconnexion");
-    // router.push("/login")
+    authClient.signOut();
   };
   const mainItems: SidebarItem[] = [
     {

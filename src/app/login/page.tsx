@@ -70,10 +70,6 @@ export default function LoginPage() {
               />
             </div>
           </div>
-
-          <div className="">
-            <Link href={"/signUp"}>S'inscrire</Link>
-          </div>
         </CardContent>
         <CardFooter>
           {/* <Link href="/users" className="w-full"> */}
