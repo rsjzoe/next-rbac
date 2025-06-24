@@ -5,11 +5,12 @@ import { roleService } from "./(sidebar)/roles/service/service";
 import { hashPassword } from "@/lib/password";
 export async function createService(name: ServiceName) {
   try {
-    let data = await serviceData.findByName(name);
+    const data = await serviceData.findByName(name);
 
     return data;
   } catch (error) {
-    let data = await serviceData.create(name);
+    console.log(error);
+    const data = await serviceData.create(name);
 
     return data;
   }
@@ -23,6 +24,7 @@ async function main() {
   try {
     superadminRole = await roleService.getByName("superadmin");
   } catch (error) {
+    console.log(error);
     superadminRole = await prisma.role.create({
       data: {
         roleName: "superadmin",
@@ -71,7 +73,7 @@ async function main() {
   }
 
   // Créer l'utilisateur
-  const user = await prisma.user.create({
+  await prisma.user.create({
     data: {
       name: "Super Admin",
       email,

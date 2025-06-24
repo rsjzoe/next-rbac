@@ -5,19 +5,19 @@ import { userService } from "./service/service";
 import { CreateUser, UpdateUser } from "./user-type";
 
 export async function addUser(user: CreateUser) {
-  let newUser = await userService.addUser(user);
+  const newUser = await userService.addUser(user);
   revalidatePath("/users");
   return newUser;
 }
 
 export async function deleteUser(id: string) {
-  let deletedUser = await userService.delete(id);
+  const deletedUser = await userService.delete(id);
   revalidatePath("/users");
   return deletedUser;
 }
 
 export async function updateUser(id: string, updatedUser: UpdateUser) {
-  let user = await userService.updateUserById(id, updatedUser);
+  const user = await userService.updateUserById(id, updatedUser);
   revalidatePath("/users");
   return user;
 }

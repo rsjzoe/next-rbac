@@ -6,7 +6,7 @@ import { getUserConnected } from "./users/get-user-connected";
 import { ConnectedGuard } from "@/components/connected-guard";
 
 export default async function Layout({ children }: LayoutProps) {
-  let userConnected = await getUserConnected();
+  const userConnected = await getUserConnected();
   return (
     <ConnectedGuard>
       <UserProvider user={userConnected.user}>

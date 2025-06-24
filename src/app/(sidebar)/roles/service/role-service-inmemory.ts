@@ -9,7 +9,7 @@ export class RoleServiceInMemory implements RoleService {
 
   addRole = async (role: CreateRole) => {
     const permissions: Permission[] = [];
-    for (let permission of role.permissions) {
+    for (const permission of role.permissions) {
       const service = await this.serviceData.findServiceById(
         permission.serviceId
       );
@@ -39,7 +39,7 @@ export class RoleServiceInMemory implements RoleService {
     const newRoles: Role[] = [];
     let roleToDelete: Role | null = null;
 
-    for (let role of this.roles) {
+    for (const role of this.roles) {
       if (role.id == id) {
         roleToDelete = role;
       }
@@ -76,7 +76,7 @@ export class RoleServiceInMemory implements RoleService {
 
   updateRoleById = async (id: number, updatedRole: UpdateRole) => {
     const permissions: Permission[] = [];
-    for (let permission of updatedRole.permissions) {
+    for (const permission of updatedRole.permissions) {
       const service = await this.serviceData.findServiceById(
         permission.serviceId
       );
@@ -92,7 +92,7 @@ export class RoleServiceInMemory implements RoleService {
         },
       });
     }
-    for (let role of this.roles) {
+    for (const role of this.roles) {
       if (role.id == id) {
         role.permissions = permissions;
         return role;

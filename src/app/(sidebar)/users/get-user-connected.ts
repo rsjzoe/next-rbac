@@ -16,7 +16,7 @@ export async function getUserConnected(): Promise<UserConnected> {
   return {
     user,
     hasAccess(serviceName, action) {
-      for (let permisssion of user.role.permissions) {
+      for (const permisssion of user.role.permissions) {
         if (permisssion.service.name == serviceName) {
           // if (action == "canCreate") {
           //   return permisssion["canCreate"];

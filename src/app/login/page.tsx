@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LockIcon, MailIcon } from "lucide-react";
 import { useState } from "react";
-import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {

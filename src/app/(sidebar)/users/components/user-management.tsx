@@ -209,7 +209,7 @@ export function UserManagement({ users, roles }: UserManagementProps) {
             <AlertDialogTitle>Êtes-vous sûr?</AlertDialogTitle>
             <AlertDialogDescription>
               Cette action ne peut pas être annulée. Cela supprimera
-              définitivement l'utilisateur
+              définitivement l{"'"}utilisateur
               {currentUser && ` "${currentUser.name}"`} et supprimera ses
               données de nos serveurs.
             </AlertDialogDescription>

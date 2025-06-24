@@ -49,7 +49,7 @@ export class RoleServicePrisma implements RoleService {
   }
 
   async listAll(): Promise<Role[]> {
-    let data = await prisma.role.findMany({
+    const data = await prisma.role.findMany({
       include: {
         permissions: {
           include: {

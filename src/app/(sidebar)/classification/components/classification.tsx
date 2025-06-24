@@ -106,6 +106,7 @@ const categories = [
   "Technique",
 ];
 
+type FilterStatus = "all" | "active" | "inactive";
 export function ClassificationManagement() {
   const { hasAccess } = useUserConnected();
 
@@ -118,9 +119,7 @@ export function ClassificationManagement() {
   const [currentClassification, setCurrentClassification] =
     useState<Classification | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<
-    "all" | "active" | "inactive"
-  >("all");
+  const [statusFilter, setStatusFilter] = useState<FilterStatus>("all");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
 
   const handleAddClassification = (
@@ -208,7 +207,7 @@ export function ClassificationManagement() {
           <div className="flex items-center gap-2">
             <Select
               value={statusFilter}
-              onValueChange={(value) => setStatusFilter(value as any)}
+              onValueChange={(value) => setStatusFilter(value as FilterStatus)}
             >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Filtrer par statut" />

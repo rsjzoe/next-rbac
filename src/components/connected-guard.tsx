@@ -28,4 +28,4 @@ export function ConnectedGuard({ children }: ConnectedGuardProps) {
   return <>{children}</>;
 }
 
-type ConnectedGuardProps = PropsWithChildren<{}>;
+type ConnectedGuardProps = PropsWithChildren

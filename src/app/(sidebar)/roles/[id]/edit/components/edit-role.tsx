@@ -102,6 +102,8 @@ export function EditRole({ role, services }: EditRoleProps) {
 
       router.push("/roles");
     } catch (error) {
+      console.log(error);
+      
       toast("Erreur", { description: "Impossible de mettre à jour le rôle" });
     } finally {
       setIsSaving(false);

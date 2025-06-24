@@ -24,7 +24,7 @@ export class UserServiceInMemory implements UserService {
     const newUsers: User[] = [];
     let userToDelete: User | null = null;
 
-    for (let user of this.users) {
+    for (const user of this.users) {
       if (user.id === id) {
         userToDelete = user;
       } else {
@@ -70,7 +70,7 @@ export class UserServiceInMemory implements UserService {
     id: string,
     updatedUser: UpdateUser
   ): Promise<User> => {
-    for (let user of this.users) {
+    for (const user of this.users) {
       if (user.id === id) {
         if (updatedUser.name !== undefined) {
           user.name = updatedUser.name;

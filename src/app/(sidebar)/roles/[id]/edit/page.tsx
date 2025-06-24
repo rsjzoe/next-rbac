@@ -12,10 +12,12 @@ interface EditRolePageProps {
 export default async function EditRolePage({ params }: EditRolePageProps) {
   const { id } = await params;
   try {
-    let role = await roleService.getById(Number(id));
-    let services = await serviceData.listAll();
+    const role = await roleService.getById(Number(id));
+    const services = await serviceData.listAll();
     return <EditRole role={role} services={services} />;
   } catch (error) {
+    console.log(error);
+
     notFound();
   }
 }

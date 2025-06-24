@@ -1,4 +1,4 @@
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -92,7 +92,9 @@ export default async function RolesPage() {
   return (
     <div className="flex-1 p-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Vous n'avez pas d'acces</h1>
+        <h1 className="text-3xl font-bold">
+          Vous n{"'"}avez pas d{"'"}acces
+        </h1>
       </div>
     </div>
   );

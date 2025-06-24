@@ -1,6 +1,5 @@
-import { serviceData } from "../../service-data/service-data";
 import { RoleService } from "./role-service";
-import { RoleServiceInMemory } from "./role-service-inmemory";
+// import { RoleServiceInMemory } from "./role-service-inmemory";
 import { RoleServicePrisma } from "./role-service-prisma";
 
 export const roleService: RoleService = new RoleServicePrisma();

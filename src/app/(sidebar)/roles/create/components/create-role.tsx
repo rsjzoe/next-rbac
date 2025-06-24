@@ -96,6 +96,8 @@ export function CreateRoleClient({ services }: CreateRoleProps) {
 
       router.push("/roles");
     } catch (error) {
+      console.log(error);
+
       toast("Erreur", {
         description: "Impossible de créer le rôle",
       });
