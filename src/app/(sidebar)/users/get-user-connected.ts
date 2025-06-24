@@ -11,7 +11,7 @@ export async function getUserConnected(): Promise<UserConnected> {
   if (!session) {
     redirect("/login");
   }
-  const user = await userService.getById(session.session.id);
+  const user = await userService.getById(session.user.id);
 
   return {
     user,
